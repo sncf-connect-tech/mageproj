@@ -4,19 +4,30 @@ package main
 
 import (
 	"os"
+	"path/filepath"
 
 	"github.com/voyages-sncf-technologies/mageproj/mgp"
 )
 
 const (
-	projectName = "mageproj"
-	packageName = "github.com/nocquidant/magedir"
+	projectName  = "mageproj"
+	groupName    = "voyages-sncf-technologies"
+	artifactRepo = "github.com"
+	gitRepo      = "github.com"
 )
 
 var proj *mgp.MageProject
 
 func init() {
-	proj = mgp.NewMageProject(currentDir(), projectName, packageName)
+	packageName := filepath.Join(gitRepo, groupName, projectName)
+	artifactURL := "https://" + filepath.Join(artifactRepo, groupName, projectName, "releases")
+	gitURL := "https://" + filepath.Join(gitRepo, groupName, projectName)
+
+	withArtURL := mgp.WithArtifactURL(artifactURL)
+	withGitURL := mgp.WithGitURL(gitURL)
+
+	proj = mgp.NewMageProject(currentDir(), projectName, packageName,
+		withArtURL, withGitURL)
 }
 
 func currentDir() string {
