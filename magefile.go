@@ -46,3 +46,8 @@ func Test() error {
 func Build() error {
 	return proj.Build()
 }
+
+// ChangeLog generates a ChangeLog based on git history
+func ChangeLog() error {
+	return proj.ChangeLog()
+}
