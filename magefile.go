@@ -5,18 +5,18 @@ package main
 import (
 	"os"
 
-	"github.com/nocquidant/mageproj/mgp"
+	"github.com/voyages-sncf-technologies/mageproj/mgp"
+)
+
+const (
+	projectName = "mageproj"
+	packageName = "github.com/nocquidant/magedir"
 )
 
 var proj *mgp.MageProject
 
 func init() {
-	proj = &mgp.MageProject{
-		ProjectName: "mageproj",
-		BuildDir:    "build",
-		PackageName: "github.com/nocquidant/magedir",
-	}
-	proj = mgp.InitMageProject(currentDir(), proj)
+	proj = mgp.NewMageProject(currentDir(), projectName, packageName)
 }
 
 func currentDir() string {

@@ -1,10 +1,8 @@
 package mgl
 
 import (
-	"archive/zip"
 	"errors"
 	"fmt"
-	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -12,6 +10,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/voyages-sncf-technologies/mageproj/internal/util"
 )
 
 // MageLibrary provides Mage independent functions to build its own targets
@@ -19,20 +19,28 @@ type MageLibrary struct {
 	workdir string
 	pkgs    *PackageInfos
 	git     *GitInfos
+	art     *ArtifactInfos
 	dck     *DockerInfos
 }
 
 // NewMageLibrary constructs new MageLibrary instance
-func NewMageLibrary(workdir string) *MageLibrary {
-	commons := MageLibrary{}
+func NewMageLibrary(workdir string, options ...MageLibraryOption) *MageLibrary {
+	commons := &MageLibrary{}
 	commons.workdir = workdir
 	commons.pkgs = &PackageInfos{}
 	commons.git = &GitInfos{}
+	commons.art = &ArtifactInfos{}
 	commons.dck = &DockerInfos{}
-	return &commons
+	for _, option := range options {
+		option(commons)
+	}
+	return commons
 }
 
-// Workdir returns workdir used
+// MageLibraryOption defines an operation which set an option
+type MageLibraryOption func(*MageLibrary)
+
+// Workdir returns the workdir used
 func (c *MageLibrary) Workdir() string {
 	return c.workdir
 }
@@ -53,17 +61,6 @@ func (c *MageLibrary) Version() string {
 	return version
 }
 
-func execOutput(cmd string, args ...string) (string, error) {
-	out, err := exec.Command(cmd, args...).Output()
-	if err != nil {
-		return "", err
-	}
-	if len(out) > 0 {
-		return string(out), nil
-	}
-	return "", nil
-}
-
 // PackageInfos holds information regarding the go project
 type PackageInfos struct {
 	prefixLen int
@@ -71,19 +68,12 @@ type PackageInfos struct {
 	init      sync.Once
 }
 
-func goCmd() string {
-	if cmd := os.Getenv("MAGEFILE_GOCMD"); cmd != "" {
-		return cmd
-	}
-	return "go"
-}
-
 // PackageDetails aggregates the package information regarding the go project
 func (c *MageLibrary) PackageDetails() (*PackageInfos, error) {
 	var err error
 	c.pkgs.init.Do(func() {
 		var s string
-		s, err = execOutput(goCmd(), "list", "./...")
+		s, err = util.ExecOutput(util.GoCmd(), "list", "./...")
 		if err != nil {
 			return
 		}
@@ -106,37 +96,55 @@ type GitInfos struct {
 	init           sync.Once
 }
 
-func trimString(val string) string {
-	val = strings.TrimSpace(val)
-	val = strings.TrimPrefix(val, "\"")
-	val = strings.TrimSuffix(val, "\n")
-	val = strings.TrimSuffix(val, "\"")
-	return val
-}
-
 // GitDetails aggregates the information regarding git
 func (c *MageLibrary) GitDetails() (*GitInfos, error) {
 	var err error
 	c.git.init.Do(func() {
-		c.git.Rev, _ = execOutput("git", "rev-parse", "--short", "HEAD")
-		c.git.Rev = trimString(c.git.Rev)
+		gitDir := filepath.Join(c.Workdir(), ".git")
 
-		c.git.TagAtRev, _ = execOutput("git", "tag", fmt.Sprintf("--points-at=%s", c.git.Rev))
-		c.git.TagAtRev = trimString(c.git.TagAtRev)
+		c.git.Rev, _ = util.ExecOutput(util.GitCmd(), "--git-dir", gitDir, "rev-parse", "--short", "HEAD")
+		c.git.Rev = util.TrimString(c.git.Rev)
 
-		c.git.LatestTag, _ = execOutput("git", "for-each-ref", "--format=\"%(tag)\"", "--sort=-taggerdate", "refs/tags")
+		c.git.TagAtRev, _ = util.ExecOutput(util.GitCmd(), "--git-dir", gitDir, "tag", fmt.Sprintf("--points-at=%s", c.git.Rev))
+		c.git.TagAtRev = util.TrimString(c.git.TagAtRev)
+
+		c.git.LatestTag, _ = util.ExecOutput(util.GitCmd(), "--git-dir", gitDir, "for-each-ref", "--format=\"%(tag)\"", "--sort=-taggerdate", "refs/tags")
 		if c.git.LatestTag != "" {
 			allTags := strings.Split(c.git.LatestTag, "\n")
 			if len(allTags) > 0 {
-				c.git.LatestTag = trimString(allTags[0])
+				c.git.LatestTag = util.TrimString(allTags[0])
 			}
 		}
-		c.git.LatestTag = trimString(c.git.LatestTag)
+		c.git.LatestTag = util.TrimString(c.git.LatestTag)
 
-		c.git.RevAtLatestTag, _ = execOutput("git", "rev-list", "--abbrev-commit", "-n", "1", fmt.Sprintf("%s", c.git.LatestTag))
-		c.git.RevAtLatestTag = trimString(c.git.RevAtLatestTag)
+		c.git.RevAtLatestTag, _ = util.ExecOutput(util.GitCmd(), "--git-dir", gitDir, "rev-list", "--abbrev-commit", "-n", "1", fmt.Sprintf("%s", c.git.LatestTag))
+		c.git.RevAtLatestTag = util.TrimString(c.git.RevAtLatestTag)
 	})
 	return c.git, err
+}
+
+// ArtifactInfos holds information regarding artifacts registry
+type ArtifactInfos struct {
+	URL  string
+	Usr  string
+	Pwd  string
+	init sync.Once
+}
+
+// ArtifactDetails aggregates the information regarding artifacts registry
+func (c *MageLibrary) ArtifactDetails(url, user string) *ArtifactInfos {
+	c.art.init.Do(func() {
+		c.art.URL = url
+		c.art.Usr = user
+		c.art.Pwd = "to.be.set"
+		if usr := os.Getenv("ARTIFACT_USR"); usr != "" {
+			c.art.Usr = usr
+		}
+		if pwd := os.Getenv("ARTIFACT_PWD"); pwd != "" {
+			c.art.Pwd = pwd
+		}
+	})
+	return c.art
 }
 
 // DockerInfos holds information regarding docker
@@ -183,7 +191,7 @@ func (c *MageLibrary) Format() error {
 			// gofmt doesn't exit with non-zero when it finds unformatted code
 			// so we have to explicitly look for output, and if we find any, we
 			// should fail this target.
-			s, err := execOutput("gofmt", "-l", f)
+			s, err := util.ExecOutput("gofmt", "-l", f)
 			if err != nil {
 				fmt.Printf("ERROR: running gofmt on %q: %v\n", f, err)
 				failed = true
@@ -228,7 +236,7 @@ func (c *MageLibrary) Lint() error {
 
 // Vet runs go vet linter
 func (c *MageLibrary) Vet() error {
-	if err := exec.Command(goCmd(), "vet", "./...").Run(); err != nil {
+	if err := exec.Command(util.GoCmd(), "vet", "./...").Run(); err != nil {
 		return fmt.Errorf("error running go vet: %v", err)
 	}
 	return nil
@@ -236,60 +244,11 @@ func (c *MageLibrary) Vet() error {
 
 // InstallDeps installs the additional dependencies: goimports & golint
 func (c *MageLibrary) InstallDeps() error {
-	err := exec.Command(goCmd(), "get", "golang.org/x/lint/golint").Run()
+	err := exec.Command(util.GoCmd(), "get", "golang.org/x/lint/golint").Run()
 	if err == nil {
 		return err
 	}
-	return exec.Command(goCmd(), "get", "golang.org/x/tools/cmd/goimports").Run()
-}
-
-// ZipFiles compresses one or many files into a single zip archive file.
-// The original code was published under MIT licence under https://golangcode.com/create-zip-files-in-go/
-func (c *MageLibrary) ZipFiles(filename string, files []string) error {
-	newfile, err := os.Create(filename)
-	if err != nil {
-		return err
-	}
-	defer newfile.Close()
-
-	zipWriter := zip.NewWriter(newfile)
-	defer zipWriter.Close()
-
-	// Add files to zip
-	for _, file := range files {
-
-		zipfile, err := os.Open(file)
-		if err != nil {
-			return err
-		}
-		defer zipfile.Close()
-
-		// Get the file information
-		info, err := zipfile.Stat()
-		if err != nil {
-			return err
-		}
-
-		header, err := zip.FileInfoHeader(info)
-		if err != nil {
-			return err
-		}
-
-		// Change to deflate to gain better compression
-		// see http://golang.org/pkg/archive/zip/#pkg-constants
-		header.Method = zip.Deflate
-
-		writer, err := zipWriter.CreateHeader(header)
-		if err != nil {
-			return err
-		}
-		_, err = io.Copy(writer, zipfile)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
+	return exec.Command(util.GoCmd(), "get", "golang.org/x/tools/cmd/goimports").Run()
 }
 
 // ChangeLog generates a ChangeLog based on git history
@@ -300,12 +259,13 @@ func (c *MageLibrary) ChangeLog(filename string, artifactURL, gitURL string) err
 	}
 	defer newfile.Close()
 
-	out, err := execOutput("git", "log", "--pretty=\"tformat:%d|%ci|%h|%cn|%s\"")
+	gitDir := filepath.Join(c.Workdir(), ".git")
+	out, err := util.ExecOutput(util.GitCmd(), "--git-dir", gitDir, "log", "--pretty=\"tformat:%d|%ci|%h|%cn|%s\"")
 	if err != nil {
 		return nil
 	}
 
-	tag := regexp.MustCompile(`^.*tag: v([0-9]+\.[0-9]+\.[0-9]+).*$`)
+	tag := regexp.MustCompile(`^.*tag: (v[0-9]+\.[0-9]+\.[0-9]+).*$`)
 
 	lines := strings.Split(out, "\n")
 	for _, line := range lines {
@@ -316,10 +276,15 @@ func (c *MageLibrary) ChangeLog(filename string, artifactURL, gitURL string) err
 		var outs string
 		if tag.MatchString(tokens.refNames) {
 			match := tag.FindStringSubmatch(tokens.refNames)
-			outs = fmt.Sprintf("\n## Release v[%s](%s/%s) (%s)\n\n", match[1], artifactURL, match[1], tokens.committerDate)
-		} else {
-			outs = fmt.Sprintf("* [%s](%s/commit/%s) - %s (%s)\n", tokens.commitHash, gitURL, tokens.commitHash, tokens.subject, tokens.committerName)
+			outs = fmt.Sprintf("\n## Release [%s](%s/%s) (%s)\n\n", match[1], artifactURL, match[1], tokens.committerDate)
+
+			if _, err = newfile.WriteString(outs); err != nil {
+				return err
+			}
 		}
+
+		outs = fmt.Sprintf("* [%s](%s/commit/%s) - %s (%s)\n", tokens.commitHash, gitURL, tokens.commitHash, tokens.subject, tokens.committerName)
+
 		if _, err = newfile.WriteString(outs); err != nil {
 			return err
 		}
@@ -342,10 +307,10 @@ func convertToTokens(line string) *historyTokens {
 		return nil
 	}
 	history := historyTokens{}
-	history.refNames = trimString(tokens[0])
-	history.committerDate = trimString(tokens[1])
-	history.commitHash = trimString(tokens[2])
-	history.committerName = trimString(tokens[3])
-	history.subject = trimString(tokens[4])
+	history.refNames = util.TrimString(tokens[0])
+	history.committerDate = util.TrimString(tokens[1])
+	history.commitHash = util.TrimString(tokens[2])
+	history.committerName = util.TrimString(tokens[3])
+	history.subject = util.TrimString(tokens[4])
 	return &history
 }

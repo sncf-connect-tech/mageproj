@@ -1,6 +1,6 @@
 # mageproj
 
-Utilities to use with [Mage](https://github.com/magefile/mage) in order to keep `magefile.go` in projects as [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) as possible.
+Opiniated utilities to use with [Mage](https://github.com/magefile/mage) in order to keep `magefile.go` in projects as [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) as possible.
 
 ## Package library: 'mgl'
 
