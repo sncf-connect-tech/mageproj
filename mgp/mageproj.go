@@ -62,6 +62,13 @@ func WithCompileFlags(val string) MageProjectOption {
 	}
 }
 
+// WithTestFlags TODO
+func WithTestFlags(val string) MageProjectOption {
+	return func(ml *MageProject) {
+		ml.testFlags = val
+	}
+}
+
 // WithDockerRegistry TODO
 func WithDockerRegistry(val string) MageProjectOption {
 	return func(ml *MageProject) {
@@ -104,6 +111,7 @@ type MageProject struct {
 	buildDir    string
 	packageName string
 	ldFlags     string
+	testFlags   string
 	dckRegistry string
 	dckImage    string
 	dckAppPath  string
@@ -132,7 +140,7 @@ func (p *MageProject) envFlags() (map[string]string, error) {
 }
 
 func (p *MageProject) testGoFlags() string {
-	return ""
+	return p.testFlags
 }
 
 func (p *MageProject) buildTags() string {
@@ -324,6 +332,7 @@ func (p *MageProject) buildSpecific(t target) (string, error) {
 	if f := p.linkFlags(); f != "" {
 		ldflags = "-ldflags='" + f + "'"
 	}
+
 	err = sh.RunWith(envFlags, mg.GoCmd(), "build", "-o", exe, ldflags)
 	return exe, err
 }

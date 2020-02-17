@@ -236,7 +236,7 @@ func (c *MageLibrary) Lint() error {
 
 // Vet runs go vet linter
 func (c *MageLibrary) Vet() error {
-	if err := exec.Command(util.GoCmd(), "vet", "./...").Run(); err != nil {
+	if err := util.RunCmd(util.GoCmd(), "vet", "./..."); err != nil {
 		return fmt.Errorf("error running go vet: %v", err)
 	}
 	return nil
@@ -244,11 +244,12 @@ func (c *MageLibrary) Vet() error {
 
 // InstallDeps installs the additional dependencies: goimports & golint
 func (c *MageLibrary) InstallDeps() error {
-	err := exec.Command(util.GoCmd(), "get", "golang.org/x/lint/golint").Run()
+	err := util.RunCmd(util.GoCmd(), "get", "golang.org/x/lint/golint")
 	if err == nil {
 		return err
 	}
-	return exec.Command(util.GoCmd(), "get", "golang.org/x/tools/cmd/goimports").Run()
+	err = util.RunCmd(util.GoCmd(), "get", "golang.org/x/tools/cmd/goimports")
+	return err
 }
 
 // ChangeLog generates a ChangeLog based on git history

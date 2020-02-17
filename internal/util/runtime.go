@@ -1,9 +1,20 @@
 package util
 
 import (
+	"fmt"
 	"os"
+	"os/exec"
 	"strconv"
 )
+
+// RunCmd runs the given command displaying its standard output if in verbose mode
+func RunCmd(name string, arg ...string) error {
+	out, err := exec.Command(name, arg...).Output()
+	if Verbose() {
+		fmt.Println(out)
+	}
+	return err
+}
 
 // Verbose reports whether a magefile was run with the verbose flag.
 func Verbose() bool {
