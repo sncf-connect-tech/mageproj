@@ -1,6 +1,11 @@
 
-## Release [v1.0.1](https://github.com/voyages-sncf-technologies/mageproj/releases/v1.0.1) (2020-02-17 16:20:36 +0100)
+## Release [v1.0.2](https://github.com/voyages-sncf-technologies/mageproj/releases/v1.0.2) (2020-02-17 17:10:19 +0100)
 
+* [9f15a26](https://github.com/voyages-sncf-technologies/mageproj/commit/9f15a26) - Bugfix: ldflags and simple quote (Nicolas Ocquidant)
+
+## Release [v1.0.1](https://github.com/voyages-sncf-technologies/mageproj/releases/v1.0.1) (2020-02-17 16:23:14 +0100)
+
+* [727e621](https://github.com/voyages-sncf-technologies/mageproj/commit/727e621) - Changelog for v1.0.1 (Nicolas Ocquidant)
 * [1c70698](https://github.com/voyages-sncf-technologies/mageproj/commit/1c70698) - Package also validate and test (Nicolas Ocquidant)
 * [877b90b](https://github.com/voyages-sncf-technologies/mageproj/commit/877b90b) - Show output for commands if in debug mode (Nicolas Ocquidant)
 * [234da23](https://github.com/voyages-sncf-technologies/mageproj/commit/234da23) - Improve lisibility (Nicolas Ocquidant)
