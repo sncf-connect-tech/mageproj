@@ -195,6 +195,9 @@ func (p *MageProject) Build() error {
 
 // Package packages cross platform binaries in build dir
 func (p *MageProject) Package() error {
+	mg.Deps(p.Validate)
+	mg.Deps(p.Test)
+
 	fmt.Println("===== package")
 
 	version := p.mglib.Version()
