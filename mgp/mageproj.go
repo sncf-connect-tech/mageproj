@@ -333,7 +333,7 @@ func (p *MageProject) buildSpecific(t target) (string, error) {
 
 	ldflags := ""
 	if f := p.linkFlags(); f != "" {
-		ldflags = "-ldflags='" + f + "'"
+		ldflags = "-ldflags=" + f
 	}
 
 	err = sh.RunWith(envFlags, mg.GoCmd(), "build", "-o", exe, ldflags)
