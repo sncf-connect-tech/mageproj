@@ -10,7 +10,7 @@ import (
 // RunCmd runs the given command displaying its standard output if in verbose mode
 func RunCmd(name string, arg ...string) error {
 	out, err := exec.Command(name, arg...).Output()
-	if Verbose() {
+	if Verbose() && out != nil && len(out) > 0 {
 		fmt.Println(out)
 	}
 	return err
