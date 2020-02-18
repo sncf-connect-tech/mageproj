@@ -1,6 +1,12 @@
 
-## Release [v1.0.2](https://github.com/voyages-sncf-technologies/mageproj/releases/v1.0.2) (2020-02-17 17:10:19 +0100)
+## Release [v1.0.3](https://github.com/voyages-sncf-technologies/mageproj/releases/v1.0.3) (2020-02-18 09:17:49 +0100)
 
+* [549d786](https://github.com/voyages-sncf-technologies/mageproj/commit/549d786) - Update go.sum (Nicolas Ocquidant)
+* [9a0a02d](https://github.com/voyages-sncf-technologies/mageproj/commit/9a0a02d) - Bugfix: check for nil before printing (Nicolas Ocquidant)
+
+## Release [v1.0.2](https://github.com/voyages-sncf-technologies/mageproj/releases/v1.0.2) (2020-02-17 17:14:38 +0100)
+
+* [1e625bc](https://github.com/voyages-sncf-technologies/mageproj/commit/1e625bc) - Changelog for v1.0.2 (Nicolas Ocquidant)
 * [9f15a26](https://github.com/voyages-sncf-technologies/mageproj/commit/9f15a26) - Bugfix: ldflags and simple quote (Nicolas Ocquidant)
 
 ## Release [v1.0.1](https://github.com/voyages-sncf-technologies/mageproj/releases/v1.0.1) (2020-02-17 16:23:14 +0100)
