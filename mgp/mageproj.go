@@ -144,7 +144,7 @@ func (p *MageProject) testGoFlags() string {
 }
 
 func (p *MageProject) buildTags() string {
-	return "none"
+	return ""
 }
 
 // Validate runs go format and linters
@@ -161,7 +161,13 @@ func (p *MageProject) Test() error {
 	fmt.Println("===== test")
 
 	env := map[string]string{"GOFLAGS": p.testGoFlags()}
-	return sh.RunWith(env, mg.GoCmd(), "test", "./...", "-tags", p.buildTags())
+
+	tags := ""
+	if t := p.buildTags(); t != "" {
+		tags = "-tags" + t
+	}
+
+	return sh.RunWith(env, mg.GoCmd(), "test", "./...", tags)
 }
 
 func (p *MageProject) dumpInfoToDisk() error {
