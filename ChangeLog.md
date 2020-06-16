@@ -1,6 +1,13 @@
 
-## Release [v1.0.4](https://github.com/voyages-sncf-technologies/mageproj/releases/v1.0.4) (2020-06-15 14:06:33 +0200)
+## Release [v1.0.5](https://github.com/voyages-sncf-technologies/mageproj/releases/v1.0.5) (2020-06-16 18:41:58 +0200)
 
+* [8b20754](https://github.com/voyages-sncf-technologies/mageproj/commit/8b20754) - Update go.mod (Nicolas Ocquidant)
+* [16510c2](https://github.com/voyages-sncf-technologies/mageproj/commit/16510c2) - Unkown user is empty string (Nicolas Ocquidant)
+* [8bc39db](https://github.com/voyages-sncf-technologies/mageproj/commit/8bc39db) - Also print stderr from Command (Nicolas Ocquidant)
+
+## Release [v1.0.4](https://github.com/voyages-sncf-technologies/mageproj/releases/v1.0.4) (2020-06-15 14:13:41 +0200)
+
+* [b902b76](https://github.com/voyages-sncf-technologies/mageproj/commit/b902b76) - Changelog for v1.0.4 (Nicolas Ocquidant)
 * [851ffa8](https://github.com/voyages-sncf-technologies/mageproj/commit/851ffa8) - Update to go 1.14 (Nicolas Ocquidant)
 * [54952bb](https://github.com/voyages-sncf-technologies/mageproj/commit/54952bb) - Build flags may be empty (Nicolas Ocquidant)
 
