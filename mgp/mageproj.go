@@ -431,7 +431,7 @@ func (p *MageProject) DockerPushImage() error {
 		return errors.New("A git tag is needed to push Docker image")
 	}
 
-	dck := p.mglib.DockerDetails(p.dckRegistry, p.dckImage, "jenkins_nexus")
+	dck := p.mglib.DockerDetails(p.dckRegistry, p.dckImage, "")
 
 	docker := sh.RunCmd("docker")
 	if err := docker("login", dck.Registry, "-u", dck.Usr, "-p", dck.Pwd); err != nil {
