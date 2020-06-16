@@ -1,6 +1,7 @@
 package util
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"os/exec"
@@ -9,9 +10,17 @@ import (
 
 // RunCmd runs the given command displaying its standard output if in verbose mode
 func RunCmd(name string, arg ...string) error {
-	out, err := exec.Command(name, arg...).Output()
+	c := exec.Command(name, arg...)
+
+	var stderr bytes.Buffer
+	c.Stderr = &stderr
+
+	out, err := c.Output()
 	if Verbose() && out != nil && len(out) > 0 {
 		fmt.Println(out)
+	}
+	if err != nil {
+		fmt.Println(stderr.String())
 	}
 	return err
 }
