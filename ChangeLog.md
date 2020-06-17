@@ -1,6 +1,12 @@
 
-## Release [v1.0.5](https://github.com/voyages-sncf-technologies/mageproj/releases/v1.0.5) (2020-06-16 18:41:58 +0200)
+## Release [v1.0.6](https://github.com/voyages-sncf-technologies/mageproj/releases/v1.0.6) (2020-06-17 11:53:51 +0200)
 
+* [8ff1a47](https://github.com/voyages-sncf-technologies/mageproj/commit/8ff1a47) - Allow c/p from RELEASE.md (Nicolas Ocquidant)
+* [231ccc1](https://github.com/voyages-sncf-technologies/mageproj/commit/231ccc1) - Build tarball for Linux/MacOS and zip for Windows (Nicolas Ocquidant)
+
+## Release [v1.0.5](https://github.com/voyages-sncf-technologies/mageproj/releases/v1.0.5) (2020-06-16 18:44:41 +0200)
+
+* [3457c7f](https://github.com/voyages-sncf-technologies/mageproj/commit/3457c7f) - Changelog for v1.0.5 (Nicolas Ocquidant)
 * [8b20754](https://github.com/voyages-sncf-technologies/mageproj/commit/8b20754) - Update go.mod (Nicolas Ocquidant)
 * [16510c2](https://github.com/voyages-sncf-technologies/mageproj/commit/16510c2) - Unkown user is empty string (Nicolas Ocquidant)
 * [8bc39db](https://github.com/voyages-sncf-technologies/mageproj/commit/8bc39db) - Also print stderr from Command (Nicolas Ocquidant)

@@ -10,7 +10,7 @@
 
 ```sh
 n="1.0.0"
-git tag -a v1.0.0 -m "Version $n" #2
+git tag -a v$n -m "Version $n" #2
 mage changeLog #3
 git commit -a -m "Changelog for v$n" #4
 git push origin master #4
