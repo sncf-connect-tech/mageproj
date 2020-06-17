@@ -225,8 +225,13 @@ func (p *MageProject) Package() error {
 			"README.md",
 		}
 
-		archiveName := fmt.Sprintf("%s_%s_%s-%s.zip", p.projectName, version, t.goos, t.goarch)
-		util.ZipFiles(filepath.Join(p.buildDir, archiveName), files)
+		if t.goos == "windows" {
+			archiveName := fmt.Sprintf("%s_%s_%s-%s.zip", p.projectName, version, t.goos, t.goarch)
+			util.ZipFiles(filepath.Join(p.buildDir, archiveName), files)
+		} else {
+			archiveName := fmt.Sprintf("%s_%s_%s-%s.tar.gz", p.projectName, version, t.goos, t.goarch)
+			util.TarFiles(filepath.Join(p.buildDir, archiveName), files, false)
+		}
 
 		os.Remove(exe)
 	}
@@ -242,7 +247,7 @@ func (p *MageProject) Deploy() error {
 
 	dir := filepath.Join(p.mglib.Workdir(), p.buildDir)
 	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
-		if filepath.Ext(path) == ".zip" {
+		if filepath.Ext(path) == ".zip" || strings.HasSuffix(path, ".tar.gz") {
 			files = append(files, path)
 		}
 		return nil
