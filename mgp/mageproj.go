@@ -18,7 +18,31 @@ import (
 	"github.com/voyages-sncf-technologies/mageproj/mgl"
 )
 
-// NewMageProject constructs new MageLibrary instance
+// MageProjectOption defines an operation which set an option
+type MageProjectOption func(*MageProject)
+
+// MageProject provides Mage dependent high level targets to reuse as is
+type MageProject struct {
+	projectName string
+	groupName   string
+	buildDir    string
+	packageName string
+	ldFlags     string
+	testFlags   string
+	dckRegistry string
+	dckImage    string
+	dckAppPath  string
+	artifactURL string
+	gitURL      string
+	mglib       *mgl.MageLibrary
+}
+
+type target struct {
+	goos   string
+	goarch string
+}
+
+// NewMageProject constructs a new MageProject instance
 func NewMageProject(workdir, projectName, packageName string, options ...MageProjectOption) *MageProject {
 	// We want to use Go 1.11 modules even if the source lives inside GOPATH.
 	// The default is "auto".
@@ -38,86 +62,67 @@ func NewMageProject(workdir, projectName, packageName string, options ...MagePro
 	return proj
 }
 
-// MageProjectOption defines an operation which set an option
-type MageProjectOption func(*MageProject)
-
-// WithGroupName TODO
+// WithGroupName sets groupName to value
 func WithGroupName(val string) MageProjectOption {
 	return func(ml *MageProject) {
 		ml.groupName = val
 	}
 }
 
-// WithBuildDir TODO
+// WithBuildDir sets buildDir to value
 func WithBuildDir(val string) MageProjectOption {
 	return func(ml *MageProject) {
 		ml.buildDir = val
 	}
 }
 
-// WithCompileFlags TODO
+// WithCompileFlags sets ldFlags to value
 func WithCompileFlags(val string) MageProjectOption {
 	return func(ml *MageProject) {
 		ml.ldFlags = val
 	}
 }
 
-// WithTestFlags TODO
+// WithTestFlags sets testFlags to value
 func WithTestFlags(val string) MageProjectOption {
 	return func(ml *MageProject) {
 		ml.testFlags = val
 	}
 }
 
-// WithDockerRegistry TODO
+// WithDockerRegistry sets dckRegistry to value
 func WithDockerRegistry(val string) MageProjectOption {
 	return func(ml *MageProject) {
 		ml.dckRegistry = val
 	}
 }
 
-// WithDockerImage TODO
+// WithDockerImage sets dckImage to value
 func WithDockerImage(val string) MageProjectOption {
 	return func(ml *MageProject) {
 		ml.dckImage = val
 	}
 }
 
-// WithDockerAppPath TODO
+// WithDockerAppPath sets dckAppPath to value
 func WithDockerAppPath(val string) MageProjectOption {
 	return func(ml *MageProject) {
 		ml.dckAppPath = val
 	}
 }
 
-// WithArtifactURL TODO
+// WithArtifactURL sets artifactURL to value
 func WithArtifactURL(val string) MageProjectOption {
 	return func(ml *MageProject) {
 		ml.artifactURL = val
 	}
 }
 
-// WithGitURL TODO
+// WithGitURL sets gitURL to value
 func WithGitURL(val string) MageProjectOption {
 	return func(ml *MageProject) {
 		ml.gitURL = val
 	}
-}
-
-// MageProject provides Mage dependent high level targets to reuse as is
-type MageProject struct {
-	projectName string
-	groupName   string
-	buildDir    string
-	packageName string
-	ldFlags     string
-	testFlags   string
-	dckRegistry string
-	dckImage    string
-	dckAppPath  string
-	artifactURL string
-	gitURL      string
-	mglib       *mgl.MageLibrary
 }
 
 // MageLibrary gets Mage library used by this project
@@ -259,7 +264,7 @@ func (p *MageProject) Deploy() error {
 
 	git, _ := p.mglib.GitDetails()
 	if git.TagAtRev == "" {
-		return errors.New("A git tag is needed to deploy the binaries to a registry")
+		return errors.New("a git tag is needed to deploy the binaries to a registry")
 	}
 
 	art := p.mglib.ArtifactDetails(p.artifactURL, "")
@@ -314,16 +319,11 @@ func (p *MageProject) Deploy() error {
 		util.LogIfDebug("Received HTTP body: ", string(body))
 
 		if !(resp.StatusCode >= 200 && resp.StatusCode <= 299) {
-			return fmt.Errorf("Unsuccessful request code %d", resp.StatusCode)
+			return fmt.Errorf("unsuccessful request code %d", resp.StatusCode)
 		}
 	}
 
 	return nil
-}
-
-type target struct {
-	goos   string
-	goarch string
 }
 
 func (p *MageProject) buildSpecific(t target) (string, error) {
@@ -433,7 +433,7 @@ func (p *MageProject) DockerPushImage() error {
 
 	git, _ := p.mglib.GitDetails()
 	if git.TagAtRev == "" {
-		return errors.New("A git tag is needed to push Docker image")
+		return errors.New("a git tag is needed to push Docker image")
 	}
 
 	dck := p.mglib.DockerDetails(p.dckRegistry, p.dckImage, "")

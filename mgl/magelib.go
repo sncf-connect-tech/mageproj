@@ -23,7 +23,52 @@ type MageLibrary struct {
 	dck     *DockerInfos
 }
 
-// NewMageLibrary constructs new MageLibrary instance
+// MageLibraryOption defines an operation on MageLibrary (to set a param)
+type MageLibraryOption func(*MageLibrary)
+
+// GitInfos holds information regarding git
+type GitInfos struct {
+	Rev            string
+	TagAtRev       string
+	LatestTag      string
+	RevAtLatestTag string
+	init           sync.Once
+}
+
+// PackageInfos holds information regarding the go project
+type PackageInfos struct {
+	prefixLen int
+	Names     []string
+	init      sync.Once
+}
+
+// ArtifactInfos holds information regarding artifacts registry
+type ArtifactInfos struct {
+	URL  string
+	Usr  string
+	Pwd  string
+	init sync.Once
+}
+
+// DockerInfos holds information regarding docker
+type DockerInfos struct {
+	Registry string
+	Image    string
+	Usr      string
+	Pwd      string
+	init     sync.Once
+}
+
+// historyTokens converts git log history to tokens
+type historyTokens struct {
+	refNames      string
+	committerDate string
+	commitHash    string
+	committerName string
+	subject       string
+}
+
+// NewMageLibrary constructs a new MageLibrary instance
 func NewMageLibrary(workdir string, options ...MageLibraryOption) *MageLibrary {
 	commons := &MageLibrary{}
 	commons.workdir = workdir
@@ -36,9 +81,6 @@ func NewMageLibrary(workdir string, options ...MageLibraryOption) *MageLibrary {
 	}
 	return commons
 }
-
-// MageLibraryOption defines an operation which set an option
-type MageLibraryOption func(*MageLibrary)
 
 // Workdir returns the workdir used
 func (c *MageLibrary) Workdir() string {
@@ -61,13 +103,6 @@ func (c *MageLibrary) Version() string {
 	return version
 }
 
-// PackageInfos holds information regarding the go project
-type PackageInfos struct {
-	prefixLen int
-	Names     []string
-	init      sync.Once
-}
-
 // PackageDetails aggregates the package information regarding the go project
 func (c *MageLibrary) PackageDetails() (*PackageInfos, error) {
 	var err error
@@ -85,15 +120,6 @@ func (c *MageLibrary) PackageDetails() (*PackageInfos, error) {
 	})
 
 	return c.pkgs, err
-}
-
-// GitInfos holds information regarding git
-type GitInfos struct {
-	Rev            string
-	TagAtRev       string
-	LatestTag      string
-	RevAtLatestTag string
-	init           sync.Once
 }
 
 // GitDetails aggregates the information regarding git
@@ -117,18 +143,10 @@ func (c *MageLibrary) GitDetails() (*GitInfos, error) {
 		}
 		c.git.LatestTag = util.TrimString(c.git.LatestTag)
 
-		c.git.RevAtLatestTag, _ = util.ExecOutput(util.GitCmd(), "--git-dir", gitDir, "rev-list", "--abbrev-commit", "-n", "1", fmt.Sprintf("%s", c.git.LatestTag))
+		c.git.RevAtLatestTag, _ = util.ExecOutput(util.GitCmd(), "--git-dir", gitDir, "rev-list", "--abbrev-commit", "-n", "1", c.git.LatestTag)
 		c.git.RevAtLatestTag = util.TrimString(c.git.RevAtLatestTag)
 	})
 	return c.git, err
-}
-
-// ArtifactInfos holds information regarding artifacts registry
-type ArtifactInfos struct {
-	URL  string
-	Usr  string
-	Pwd  string
-	init sync.Once
 }
 
 // ArtifactDetails aggregates the information regarding artifacts registry
@@ -145,15 +163,6 @@ func (c *MageLibrary) ArtifactDetails(url, user string) *ArtifactInfos {
 		}
 	})
 	return c.art
-}
-
-// DockerInfos holds information regarding docker
-type DockerInfos struct {
-	Registry string
-	Image    string
-	Usr      string
-	Pwd      string
-	init     sync.Once
 }
 
 // DockerDetails aggregates the information regarding docker
@@ -229,7 +238,7 @@ func (c *MageLibrary) Lint() error {
 		}
 	}
 	if failed {
-		return errors.New("Errors running golint")
+		return errors.New("errors running golint")
 	}
 	return nil
 }
@@ -292,14 +301,6 @@ func (c *MageLibrary) ChangeLog(filename string, artifactURL, gitURL string) err
 	}
 
 	return nil
-}
-
-type historyTokens struct {
-	refNames      string
-	committerDate string
-	commitHash    string
-	committerName string
-	subject       string
 }
 
 func convertToTokens(line string) *historyTokens {
