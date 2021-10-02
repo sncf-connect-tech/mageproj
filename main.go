@@ -12,5 +12,5 @@ func main() {
 	log.Printf("Project version is: %s\n", lib.Version())
 
 	proj := mgp.NewMageProject(".", "agoodone", "github.com/name/proj")
-	log.Printf(proj.PrintInfo())
+	log.Print(proj.PrintInfo())
 }
