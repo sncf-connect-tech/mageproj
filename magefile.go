@@ -58,6 +58,11 @@ func Build() error {
 	return proj.Build()
 }
 
+// Package packages x-platform binaries in build dir
+func Package() error {
+	return proj.Package()
+}
+
 // ChangeLog generates a ChangeLog based on git history
 func ChangeLog() error {
 	return proj.ChangeLog()
