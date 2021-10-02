@@ -27,21 +27,44 @@ func RunCmd(name string, arg ...string) error {
 
 // Verbose reports whether a magefile was run with the verbose flag.
 func Verbose() bool {
-	b, _ := strconv.ParseBool(os.Getenv("MAGEFILE_VERBOSE"))
-	return b
+	val, present := os.LookupEnv("MAGEFILE_VERBOSE")
+	if present {
+		b, _ := strconv.ParseBool(val)
+		return b
+	}
+	val, present = os.LookupEnv("MAGEPROJ_VERBOSE")
+	if present {
+		b, _ := strconv.ParseBool(val)
+		return b
+	}
+	return false
 }
 
 // Debug reports whether a magefile was run with the debug flag.
 func Debug() bool {
-	b, _ := strconv.ParseBool(os.Getenv("MAGEFILE_DEBUG"))
-	return b
+	val, present := os.LookupEnv("MAGEFILE_DEBUG")
+	if present {
+		b, _ := strconv.ParseBool(val)
+		return b
+	}
+	val, present = os.LookupEnv("MAGEPROJ_DEBUG")
+	if present {
+		b, _ := strconv.ParseBool(val)
+		return b
+	}
+	return false
 }
 
 // GoCmd reports the command to use to build go code. By default it is
 // the "go" binary in the PATH.
 func GoCmd() string {
-	if cmd := os.Getenv("MAGEFILE_GOCMD"); cmd != "" {
-		return cmd
+	val, present := os.LookupEnv("MAGEFILE_GOCMD")
+	if present {
+		return val
+	}
+	val, present = os.LookupEnv("MAGEPROJ_GOCMD")
+	if present {
+		return val
 	}
 	return "go"
 }
@@ -49,5 +72,9 @@ func GoCmd() string {
 // GitCmd reports the command to use to extract git info. By default it is
 // the "go" binary in the PATH.
 func GitCmd() string {
+	val, present := os.LookupEnv("MAGEPROJ_GITCMD")
+	if present {
+		return val
+	}
 	return "git"
 }
