@@ -155,13 +155,13 @@ func (c *MageLibrary) ArtifactDetails(url, user string) *ArtifactInfos {
 		c.art.URL = url
 		c.art.Usr = user
 		c.art.Pwd = "to.be.set"
-		if usr := os.Getenv("ARTIFACT_USR"); usr != "" {
-			c.art.Usr = usr
-		}
-		if pwd := os.Getenv("ARTIFACT_PWD"); pwd != "" {
-			c.art.Pwd = pwd
-		}
 	})
+	if usr := os.Getenv("MAGEPROJ_ARTIFACT_USR"); usr != "" {
+		c.art.Usr = usr
+	}
+	if pwd := os.Getenv("MAGEPROJ_ARTIFACT_PWD"); pwd != "" {
+		c.art.Pwd = pwd
+	}
 	return c.art
 }
 
@@ -172,13 +172,13 @@ func (c *MageLibrary) DockerDetails(registry, image, user string) *DockerInfos {
 		c.dck.Image = image
 		c.dck.Usr = user
 		c.dck.Pwd = "to.be.set"
-		if usr := os.Getenv("DOCKER_USR"); usr != "" {
-			c.dck.Usr = usr
-		}
-		if pwd := os.Getenv("DOCKER_PWD"); pwd != "" {
-			c.dck.Pwd = pwd
-		}
 	})
+	if usr := os.Getenv("MAGEPROJ_DOCKER_USR"); usr != "" {
+		c.dck.Usr = usr
+	}
+	if pwd := os.Getenv("MAGEPROJ_DOCKER_PWD"); pwd != "" {
+		c.dck.Pwd = pwd
+	}
 	return c.dck
 }
 
