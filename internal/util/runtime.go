@@ -40,21 +40,6 @@ func Verbose() bool {
 	return false
 }
 
-// Debug reports whether a magefile was run with the debug flag.
-func Debug() bool {
-	val, present := os.LookupEnv("MAGEFILE_DEBUG")
-	if present {
-		b, _ := strconv.ParseBool(val)
-		return b
-	}
-	val, present = os.LookupEnv("MAGEPROJ_DEBUG")
-	if present {
-		b, _ := strconv.ParseBool(val)
-		return b
-	}
-	return false
-}
-
 // GoCmd reports the command to use to build go code. By default it is
 // the "go" binary in the PATH.
 func GoCmd() string {

@@ -15,10 +15,3 @@ func LogIfVerbose(msg string, v ...interface{}) {
 		logger.Println(msg, v)
 	}
 }
-
-// LogIfDebug logs message if debug flag is on.
-func LogIfDebug(msg string, v ...interface{}) {
-	if Debug() {
-		logger.Println(msg, v)
-	}
-}

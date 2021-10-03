@@ -316,7 +316,7 @@ func (p *MageProject) Deploy() error {
 		if err != nil {
 			return err
 		}
-		util.LogIfDebug("Received HTTP body: ", string(body))
+		util.LogIfVerbose("Received HTTP body: ", string(body))
 
 		if !(resp.StatusCode >= 200 && resp.StatusCode <= 299) {
 			return fmt.Errorf("unsuccessful request code %d", resp.StatusCode)
