@@ -9,9 +9,26 @@ import (
 // Running with mage -v will set the output to stdout.
 var logger = log.New(os.Stderr, "", 0)
 
-// LogIfVerbose logs message if verbose flag is on.
-func LogIfVerbose(msg string, v ...interface{}) {
+// AlwaysLogf logs message either in verbose mode or not.
+func AlwaysLogf(msg string, v ...interface{}) {
+	logger.Printf(msg, v...)
+}
+
+// AlwaysLog logs message either in verbose mode or not.
+func AlwaysLog(msg string) {
+	logger.Println(msg)
+}
+
+// Logf logs message if verbose mode is on.
+func Logf(msg string, v ...interface{}) {
 	if Verbose() {
-		logger.Println(msg, v)
+		logger.Printf(msg, v...)
+	}
+}
+
+// Log logs message if verbose mode is on.
+func Log(msg string) {
+	if Verbose() {
+		logger.Println(msg)
 	}
 }

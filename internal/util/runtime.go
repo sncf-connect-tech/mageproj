@@ -1,7 +1,6 @@
 package util
 
 import (
-	"bytes"
 	"fmt"
 	"os"
 	"os/exec"
@@ -12,15 +11,12 @@ import (
 func RunCmd(name string, arg ...string) error {
 	c := exec.Command(name, arg...)
 
-	var stderr bytes.Buffer
-	c.Stderr = &stderr
-
-	out, err := c.Output()
+	out, err := c.CombinedOutput()
 	if Verbose() && out != nil && len(out) > 0 {
-		fmt.Println(out)
+		AlwaysLog(string(out))
 	}
 	if err != nil {
-		fmt.Println(stderr.String())
+		AlwaysLog(fmt.Sprint(err))
 	}
 	return err
 }

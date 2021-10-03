@@ -207,11 +207,11 @@ func (c *MageLibrary) Format() error {
 			}
 			if s != "" {
 				if first {
-					fmt.Println("The following files are not gofmt'ed:")
+					util.AlwaysLog("The following files are not gofmt'ed:")
 					first = false
 				}
 				failed = true
-				fmt.Println(s)
+				util.AlwaysLog(s)
 			}
 		}
 	}
@@ -253,11 +253,11 @@ func (c *MageLibrary) Vet() error {
 
 // InstallDeps installs the additional dependencies: goimports & golint
 func (c *MageLibrary) InstallDeps() error {
-	err := util.RunCmd(util.GoCmd(), "get", "golang.org/x/lint/golint")
+	err := util.RunCmd(util.GoCmd(), "install", "golang.org/x/lint/golint@latest")
 	if err == nil {
 		return err
 	}
-	err = util.RunCmd(util.GoCmd(), "get", "golang.org/x/tools/cmd/goimports")
+	err = util.RunCmd(util.GoCmd(), "install", "golang.org/x/tools/cmd/goimports@latest")
 	return err
 }
 

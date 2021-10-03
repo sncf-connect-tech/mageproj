@@ -157,13 +157,13 @@ func (p *MageProject) Validate() error {
 	mg.Deps(p.mglib.InstallDeps)
 	mg.Deps(p.mglib.Format, p.mglib.Vet)
 
-	fmt.Println("===== validate")
+	util.AlwaysLog("===== validate")
 	return nil
 }
 
 // Test runs tests with go test
 func (p *MageProject) Test() error {
-	fmt.Println("===== test")
+	util.AlwaysLog("===== test")
 
 	env := map[string]string{"GOFLAGS": p.testGoFlags()}
 
@@ -192,9 +192,9 @@ func (p *MageProject) Build() error {
 	mg.Deps(p.Validate)
 	mg.Deps(p.Test)
 
-	fmt.Println("===== build")
+	util.AlwaysLog("===== build")
 
-	util.LogIfVerbose("Building for current OS and architecture")
+	util.Log("Building for current OS and architecture")
 	_, err := p.buildSpecific(target{})
 
 	if err == nil {
@@ -209,7 +209,7 @@ func (p *MageProject) Package() error {
 	mg.Deps(p.Validate)
 	mg.Deps(p.Test)
 
-	fmt.Println("===== package")
+	util.AlwaysLog("===== package")
 
 	version := p.mglib.Version()
 	targets := []target{
@@ -218,7 +218,7 @@ func (p *MageProject) Package() error {
 		{"linux", "amd64"},
 	}
 	for _, t := range targets {
-		fmt.Printf("Building for OS %s and architecture %s\n", t.goos, t.goarch)
+		util.Logf("Building for OS %s and architecture %s\n", t.goos, t.goarch)
 
 		exe, err := p.buildSpecific(t)
 		if err != nil {
@@ -246,7 +246,7 @@ func (p *MageProject) Package() error {
 
 // Deploy deploys cross platform binaries to artifacts registry
 func (p *MageProject) Deploy() error {
-	fmt.Println("===== deploy")
+	util.AlwaysLog("===== deploy")
 
 	var files []string
 
@@ -272,16 +272,16 @@ func (p *MageProject) Deploy() error {
 	httpClient := &http.Client{}
 	for _, file := range files {
 		url := art.URL + "/" + filepath.Join(git.TagAtRev, filepath.Base(file))
-		util.LogIfVerbose("Artifact url: ", url)
+		util.Logf("Uploading url: %s", url)
 
 		details, err := util.GetFileDetails(file)
 		if err != nil {
 			return err
 		}
 
-		util.LogIfVerbose("Sum SHA256: ", details.Checksum.Sha256)
-		util.LogIfVerbose("Sum SHA1: ", details.Checksum.Sha1)
-		util.LogIfVerbose("Sum MD5: ", details.Checksum.Md5)
+		util.Logf("Sum SHA256: %s", details.Checksum.Sha256)
+		util.Logf("Sum SHA1: %s", details.Checksum.Sha1)
+		util.Logf("Sum MD5: %s", details.Checksum.Md5)
 
 		f, err := os.Open(file)
 		if err != nil {
@@ -303,23 +303,23 @@ func (p *MageProject) Deploy() error {
 		req.ContentLength = details.Size
 		req.Close = true
 
-		util.LogIfVerbose("Uploading file: ", file)
+		util.AlwaysLogf("Uploading file: %s", file)
 		resp, err := httpClient.Do(req)
 		if err != nil {
 			return err
 		}
 
-		util.LogIfVerbose("Received HTTP status code: ", resp.StatusCode)
+		util.AlwaysLogf("Received HTTP status code: %d", resp.StatusCode)
 
 		defer resp.Body.Close()
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
 			return err
 		}
-		util.LogIfVerbose("Received HTTP body: ", string(body))
+		util.Logf("Received HTTP body: %s", string(body))
 
 		if !(resp.StatusCode >= 200 && resp.StatusCode <= 299) {
-			return fmt.Errorf("unsuccessful request code %d", resp.StatusCode)
+			return fmt.Errorf("unsuccessful request status code %d", resp.StatusCode)
 		}
 	}
 
@@ -353,10 +353,10 @@ func (p *MageProject) buildSpecific(t target) (string, error) {
 
 // Clean removes the build directory
 func (p *MageProject) Clean() error {
-	fmt.Println("===== clean")
+	util.AlwaysLog("===== clean")
 
 	if err := sh.Rm(p.buildDir); err != nil {
-		fmt.Println(err)
+		util.AlwaysLog(fmt.Sprint(err))
 	}
 
 	return nil
@@ -364,10 +364,10 @@ func (p *MageProject) Clean() error {
 
 // CleanAll removes the build directory and the docker image used for build
 func (p *MageProject) CleanAll() error {
-	fmt.Println("===== clean all")
+	util.AlwaysLog("===== clean all")
 
 	if err := sh.Rm(p.buildDir); err != nil {
-		fmt.Println(err)
+		util.AlwaysLog(fmt.Sprint(err))
 	}
 
 	docker := sh.RunCmd("docker")
@@ -375,13 +375,13 @@ func (p *MageProject) CleanAll() error {
 
 	imgs, err := util.ExecOutput("docker", "images", "-q", dockerImage)
 	if err != nil {
-		fmt.Println(err)
+		util.AlwaysLog(fmt.Sprint(err))
 	}
 
 	imgs = util.TrimString(imgs)
 	if len(imgs) > 0 {
 		if err := docker("rmi", "--force", imgs); err != nil {
-			fmt.Println(err)
+			util.AlwaysLog(fmt.Sprint(err))
 		}
 	}
 
@@ -416,7 +416,7 @@ func (p *MageProject) BuildWithDocker() error {
 
 // DockerBuildImage builds Docker image
 func (p *MageProject) DockerBuildImage() error {
-	fmt.Println("===== docker image")
+	util.AlwaysLog("===== docker image")
 
 	dck := p.mglib.DockerDetails(p.dckRegistry, p.dckImage, "")
 
@@ -429,7 +429,7 @@ func (p *MageProject) DockerBuildImage() error {
 
 // DockerPushImage pushes Docker image to a repository
 func (p *MageProject) DockerPushImage() error {
-	fmt.Println("===== docker release")
+	util.AlwaysLog("===== docker release")
 
 	git, _ := p.mglib.GitDetails()
 	if git.TagAtRev == "" {
