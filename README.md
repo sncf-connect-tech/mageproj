@@ -23,7 +23,7 @@ See [magefile.go](./example/magefile.go) for an example of magefile.
 
 ### Commands
 
-Use `-v` to enable verbose mode or set 
+To enable verbose mode, use `-v` or set `MAGEFILE_VERBOSE` variable to true.
 
 * Build
 
