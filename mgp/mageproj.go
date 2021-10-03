@@ -130,6 +130,16 @@ func (p *MageProject) MageLibrary() *mgl.MageLibrary {
 	return p.mglib
 }
 
+// Logf logs message if verbose mode is on.
+func Logf(msg string, v ...interface{}) {
+	util.Logf(msg, v) // shortcut for user
+}
+
+// Log logs message if verbose mode is on.
+func Log(msg string) {
+	util.Log(msg) // shortcut for user
+}
+
 func (p *MageProject) linkFlags() string {
 	return p.ldFlags
 }
