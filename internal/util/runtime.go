@@ -1,7 +1,6 @@
 package util
 
 import (
-	"fmt"
 	"os"
 	"os/exec"
 	"strconv"
@@ -15,9 +14,6 @@ func RunCmd(name string, arg ...string) error {
 	if Verbose() && out != nil && len(out) > 0 {
 		AlwaysLog(string(out))
 	}
-	if err != nil {
-		AlwaysLog(fmt.Sprint(err))
-	}
 	return err
 }
 
@@ -28,7 +24,7 @@ func Verbose() bool {
 		b, _ := strconv.ParseBool(val)
 		return b
 	}
-	val, present = os.LookupEnv("MAGEPROJ_VERBOSE")
+	val, present = os.LookupEnv("MAGEP_VERBOSE")
 	if present {
 		b, _ := strconv.ParseBool(val)
 		return b
@@ -43,7 +39,7 @@ func GoCmd() string {
 	if present {
 		return val
 	}
-	val, present = os.LookupEnv("MAGEPROJ_GOCMD")
+	val, present = os.LookupEnv("MAGEP_GOCMD")
 	if present {
 		return val
 	}
@@ -53,7 +49,7 @@ func GoCmd() string {
 // GitCmd reports the command to use to extract git info. By default it is
 // the "go" binary in the PATH.
 func GitCmd() string {
-	val, present := os.LookupEnv("MAGEPROJ_GITCMD")
+	val, present := os.LookupEnv("MAGEP_GITCMD")
 	if present {
 		return val
 	}

@@ -256,6 +256,8 @@ func (p *MageProject) Package() error {
 
 // Deploy deploys cross platform binaries to artifacts registry
 func (p *MageProject) Deploy() error {
+	mg.Deps(p.Package)
+
 	util.AlwaysLog("===== deploy")
 
 	var files []string
@@ -333,6 +335,47 @@ func (p *MageProject) Deploy() error {
 		}
 	}
 
+	return nil
+}
+
+// Release creates a git tag and push it to remote
+func (p *MageProject) Release() error {
+	util.AlwaysLog("===== release")
+
+	val, present := os.LookupEnv("MAGEP_VERSION")
+	if !present {
+		return errors.New("MAGEP_VERSION environment variable is required")
+	}
+
+	out, e := util.ExecOutput(util.GitCmd(), "status", "--porcelain")
+	if e != nil {
+		return e
+	}
+	if out != "" {
+		return errors.New("git working tree status is not clean")
+	}
+
+	var err error
+
+	tag := fmt.Sprintf("v%s", val)
+	msg := fmt.Sprintf("Version %s", val)
+
+	if err = util.RunCmd(util.GitCmd(), "tag", "-a", tag, "-m", msg); err != nil {
+		return err
+	}
+
+	if err = util.RunCmd(util.GitCmd(), "push", "origin", tag); err != nil {
+		return err
+	}
+
+	defer func() {
+		if err != nil {
+			sh.Run("git", "tag", "--delete", tag)
+			sh.Run("git", "push", "--delete", "origin", tag)
+		}
+	}()
+
+	util.AlwaysLogf("Tag %s created and pushed to remote", tag)
 	return nil
 }
 
@@ -500,5 +543,9 @@ func (p *MageProject) PrintInfo() string {
 
 // ChangeLog generates a ChangeLog based on git history
 func (p *MageProject) ChangeLog() error {
-	return p.mglib.ChangeLog("ChangeLog.md", p.artifactURL, p.gitURL)
+	val, present := os.LookupEnv("MAGEP_VERSION")
+	if !present {
+		return errors.New("MAGEP_VERSION environment variable is required")
+	}
+	return p.mglib.ChangeLog(val, "ChangeLog.md", p.artifactURL, p.gitURL)
 }

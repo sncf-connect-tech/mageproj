@@ -66,15 +66,20 @@ func Package() error {
 	return proj.Package()
 }
 
+// Release creates a git tag and push it to remote
+func Release() error {
+	return proj.Release()
+}
+
 // Deploy deploys x-platform binaries to artifact registry
 func Deploy() error {
-	_, present := os.LookupEnv("MAGEPROJ_ARTIFACT_USR")
+	_, present := os.LookupEnv("MAGEP_ARTIFACT_USR")
 	if !present {
-		os.Setenv("MAGEPROJ_ARTIFACT_USR", "myuser")
+		os.Setenv("MAGEP_ARTIFACT_USR", "myuser")
 	}
-	_, present = os.LookupEnv("MAGEPROJ_ARTIFACT_PWD")
+	_, present = os.LookupEnv("MAGEP_ARTIFACT_PWD")
 	if !present {
-		return errors.New("missing password for Artifactory (set variable MAGEPROJ_ARTIFACT_PWD)")
+		return errors.New("missing password for Artifactory (set variable MAGEP_ARTIFACT_PWD)")
 	}
 
 	return proj.Deploy()

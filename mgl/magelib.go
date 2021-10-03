@@ -156,10 +156,10 @@ func (c *MageLibrary) ArtifactDetails(url, user string) *ArtifactInfos {
 		c.art.Usr = user
 		c.art.Pwd = "to.be.set"
 	})
-	if usr := os.Getenv("MAGEPROJ_ARTIFACT_USR"); usr != "" {
+	if usr := os.Getenv("MAGEP_ARTIFACT_USR"); usr != "" {
 		c.art.Usr = usr
 	}
-	if pwd := os.Getenv("MAGEPROJ_ARTIFACT_PWD"); pwd != "" {
+	if pwd := os.Getenv("MAGEP_ARTIFACT_PWD"); pwd != "" {
 		c.art.Pwd = pwd
 	}
 	return c.art
@@ -173,10 +173,10 @@ func (c *MageLibrary) DockerDetails(registry, image, user string) *DockerInfos {
 		c.dck.Usr = user
 		c.dck.Pwd = "to.be.set"
 	})
-	if usr := os.Getenv("MAGEPROJ_DOCKER_USR"); usr != "" {
+	if usr := os.Getenv("MAGEP_DOCKER_USR"); usr != "" {
 		c.dck.Usr = usr
 	}
-	if pwd := os.Getenv("MAGEPROJ_DOCKER_PWD"); pwd != "" {
+	if pwd := os.Getenv("MAGEP_DOCKER_PWD"); pwd != "" {
 		c.dck.Pwd = pwd
 	}
 	return c.dck
@@ -262,12 +262,19 @@ func (c *MageLibrary) InstallDeps() error {
 }
 
 // ChangeLog generates a ChangeLog based on git history
-func (c *MageLibrary) ChangeLog(filename string, artifactURL, gitURL string) error {
+func (c *MageLibrary) ChangeLog(version, filename string, artifactURL, gitURL string) error {
 	newfile, err := os.Create(filename)
 	if err != nil {
 		return err
 	}
 	defer newfile.Close()
+
+	t := time.Now()
+	ts := t.Format("2006-01-02 15:04:05 -0700")
+	fl := fmt.Sprintf("\n## Release [%s](%s/%s) (%s)\n\n", version, artifactURL, version, ts)
+	if _, err = newfile.WriteString(fl); err != nil {
+		return err
+	}
 
 	gitDir := filepath.Join(c.Workdir(), ".git")
 	out, err := util.ExecOutput(util.GitCmd(), "--git-dir", gitDir, "log", "--pretty=\"tformat:%d|%ci|%h|%cn|%s\"")
@@ -300,6 +307,7 @@ func (c *MageLibrary) ChangeLog(filename string, artifactURL, gitURL string) err
 		}
 	}
 
+	util.AlwaysLogf("File %s generated", newfile.Name())
 	return nil
 }
 
