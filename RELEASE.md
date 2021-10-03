@@ -6,7 +6,7 @@
 
 ```sh
 ver="1.0.0"
-$ MAGEP_VERSION=$ver mage changelog
+$ MAGEFILEP_VERSION=$ver mage changelog
 File ChangeLog.md generated
 
 # then commit changes...
@@ -15,7 +15,7 @@ File ChangeLog.md generated
 * Release creating a git tag
 
 ```sh
-$ MAGEP_VERSION=$ver mage release
+$ MAGEFILEP_VERSION=$ver mage release
 Tag v1.0.0 created and pushed to remote
 ```
 

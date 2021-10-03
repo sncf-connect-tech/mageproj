@@ -73,13 +73,13 @@ func Release() error {
 
 // Deploy deploys x-platform binaries to artifact registry
 func Deploy() error {
-	_, present := os.LookupEnv("MAGEP_ARTIFACT_USR")
+	_, present := os.LookupEnv("MAGEFILEP_ARTIFACT_USR")
 	if !present {
-		os.Setenv("MAGEP_ARTIFACT_USR", "myuser")
+		os.Setenv("MAGEFILEP_ARTIFACT_USR", "myuser")
 	}
-	_, present = os.LookupEnv("MAGEP_ARTIFACT_PWD")
+	_, present = os.LookupEnv("MAGEFILEP_ARTIFACT_PWD")
 	if !present {
-		return errors.New("missing password for Artifactory (set variable MAGEP_ARTIFACT_PWD)")
+		return errors.New("missing password for Artifactory (set variable MAGEFILEP_ARTIFACT_PWD)")
 	}
 
 	return proj.Deploy()

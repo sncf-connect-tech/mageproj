@@ -342,9 +342,9 @@ func (p *MageProject) Deploy() error {
 func (p *MageProject) Release() error {
 	util.AlwaysLog("===== release")
 
-	val, present := os.LookupEnv("MAGEP_VERSION")
+	val, present := os.LookupEnv("MAGEFILEP_VERSION")
 	if !present {
-		return errors.New("MAGEP_VERSION environment variable is required")
+		return errors.New("MAGEFILEP_VERSION environment variable is required")
 	}
 
 	out, e := util.ExecOutput(util.GitCmd(), "status", "--porcelain")
@@ -543,9 +543,9 @@ func (p *MageProject) PrintInfo() string {
 
 // ChangeLog generates a ChangeLog based on git history
 func (p *MageProject) ChangeLog() error {
-	val, present := os.LookupEnv("MAGEP_VERSION")
+	val, present := os.LookupEnv("MAGEFILEP_VERSION")
 	if !present {
-		return errors.New("MAGEP_VERSION environment variable is required")
+		return errors.New("MAGEFILEP_VERSION environment variable is required")
 	}
 	return p.mglib.ChangeLog(val, "ChangeLog.md", p.artifactURL, p.gitURL)
 }

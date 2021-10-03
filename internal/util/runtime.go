@@ -24,11 +24,6 @@ func Verbose() bool {
 		b, _ := strconv.ParseBool(val)
 		return b
 	}
-	val, present = os.LookupEnv("MAGEP_VERBOSE")
-	if present {
-		b, _ := strconv.ParseBool(val)
-		return b
-	}
 	return false
 }
 
@@ -39,17 +34,13 @@ func GoCmd() string {
 	if present {
 		return val
 	}
-	val, present = os.LookupEnv("MAGEP_GOCMD")
-	if present {
-		return val
-	}
 	return "go"
 }
 
 // GitCmd reports the command to use to extract git info. By default it is
 // the "go" binary in the PATH.
 func GitCmd() string {
-	val, present := os.LookupEnv("MAGEP_GITCMD")
+	val, present := os.LookupEnv("MAGEFILEP_GITCMD")
 	if present {
 		return val
 	}

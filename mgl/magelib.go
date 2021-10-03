@@ -156,10 +156,10 @@ func (c *MageLibrary) ArtifactDetails(url, user string) *ArtifactInfos {
 		c.art.Usr = user
 		c.art.Pwd = "to.be.set"
 	})
-	if usr := os.Getenv("MAGEP_ARTIFACT_USR"); usr != "" {
+	if usr := os.Getenv("MAGEFILEP_ARTIFACT_USR"); usr != "" {
 		c.art.Usr = usr
 	}
-	if pwd := os.Getenv("MAGEP_ARTIFACT_PWD"); pwd != "" {
+	if pwd := os.Getenv("MAGEFILEP_ARTIFACT_PWD"); pwd != "" {
 		c.art.Pwd = pwd
 	}
 	return c.art
@@ -173,10 +173,10 @@ func (c *MageLibrary) DockerDetails(registry, image, user string) *DockerInfos {
 		c.dck.Usr = user
 		c.dck.Pwd = "to.be.set"
 	})
-	if usr := os.Getenv("MAGEP_DOCKER_USR"); usr != "" {
+	if usr := os.Getenv("MAGEFILEP_DOCKER_USR"); usr != "" {
 		c.dck.Usr = usr
 	}
-	if pwd := os.Getenv("MAGEP_DOCKER_PWD"); pwd != "" {
+	if pwd := os.Getenv("MAGEFILEP_DOCKER_PWD"); pwd != "" {
 		c.dck.Pwd = pwd
 	}
 	return c.dck

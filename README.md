@@ -23,7 +23,7 @@ See [magefile.go](./example/magefile.go) for an example of magefile.
 
 ### Commands
 
-Use `-v` to enable verbose mode
+Use `-v` to enable verbose mode or set 
 
 * Build
 
@@ -40,7 +40,7 @@ build-info.json myapp
 * ChangeLog (optional)
 
 ```sh
-$ MAGEP_VERSION="1.0.0" mage changelog
+$ MAGEFILEP_VERSION="1.0.0" mage changelog
 File ChangeLog.md generated
 
 # then commit changes...
@@ -49,14 +49,14 @@ File ChangeLog.md generated
 * Release
 
 ```sh
-$ MAGEP_VERSION="1.0.0" mage release
+$ MAGEFILEP_VERSION="1.0.0" mage release
 Tag v1.0.0 created and pushed to remote
 ```
 
 * Deploy
 
 ```sh
-$ MAGEP_ARTIFACT_PWD='mypassword' mage deploy 
+$ MAGEFILEP_ARTIFACT_PWD='mypassword' mage deploy 
 ===== validate
 ===== test
 ===== package
