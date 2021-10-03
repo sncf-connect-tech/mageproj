@@ -2,20 +2,21 @@
 
 ## From master branch
 
-1. Commit all staging files and push to remote
-2. Add a git tag locally
-3. Generate the changelog
-4. Commit the changelog and push changelog to remote
-5. Move the tag locally to last commit and push tag to remote
+* Generate changeLog
 
 ```sh
-n="1.0.0"
-git tag -a v$n -m "Version $n" #2
-mage changeLog #3
-git commit -a -m "Changelog for v$n" #4
-git push origin master #4
-git tag --force v$n #5
-git push origin v$n #5
+ver="1.0.0"
+$ MAGEP_VERSION=$ver mage changelog
+File ChangeLog.md generated
+
+# then commit changes...
+```
+
+* Release creating a git tag
+
+```sh
+$ MAGEP_VERSION=$ver mage release
+Tag v1.0.0 created and pushed to remote
 ```
 
 ## From another dev branch
