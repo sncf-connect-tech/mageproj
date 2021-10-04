@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/voyages-sncf-technologies/mageproj/mgp"
+	"github.com/voyages-sncf-technologies/mageproj/v2/mgp"
 )
 
 const (
@@ -61,6 +61,11 @@ func Build() error {
 // Package packages x-platform binaries in build dir
 func Package() error {
 	return proj.Package()
+}
+
+// Release creates a git tag and push it to remote
+func Release() error {
+	return proj.Release()
 }
 
 // ChangeLog generates a ChangeLog based on git history
