@@ -547,5 +547,5 @@ func (p *MageProject) ChangeLog() error {
 	if !present {
 		return errors.New("MAGEFILEP_VERSION environment variable is required")
 	}
-	return p.mglib.ChangeLog(val, "ChangeLog.md", p.artifactURL, p.gitURL)
+	return p.mglib.ChangeLog(fmt.Sprintf("v%s", val), "ChangeLog.md", p.artifactURL, p.gitURL)
 }
