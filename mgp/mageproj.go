@@ -14,8 +14,8 @@ import (
 	"github.com/magefile/mage/mg"
 	"github.com/magefile/mage/sh"
 
-	"github.com/voyages-sncf-technologies/mageproj/internal/util"
-	"github.com/voyages-sncf-technologies/mageproj/mgl"
+	"github.com/voyages-sncf-technologies/mageproj/v2/internal/util"
+	"github.com/voyages-sncf-technologies/mageproj/v2/mgl"
 )
 
 // MageProjectOption defines an operation which set an option

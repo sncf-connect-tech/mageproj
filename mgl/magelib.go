@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/voyages-sncf-technologies/mageproj/internal/util"
+	"github.com/voyages-sncf-technologies/mageproj/v2/internal/util"
 )
 
 // MageLibrary provides Mage independent functions to build its own targets

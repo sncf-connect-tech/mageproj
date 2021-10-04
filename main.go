@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/voyages-sncf-technologies/mageproj/mgl"
-	"github.com/voyages-sncf-technologies/mageproj/mgp"
+	"github.com/voyages-sncf-technologies/mageproj/v2/mgl"
+	"github.com/voyages-sncf-technologies/mageproj/v2/mgp"
 )
 
 func main() {
