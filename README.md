@@ -44,7 +44,7 @@ $ MAGEFILEP_VERSION="1.0.0" mage changelog
 File ChangeLog.md generated
 
 # then commit changes
-git add ChangeLog.md && git commit -m "Changelog for v1.0.0"
+$ git add ChangeLog.md && git commit -m "Changelog for v1.0.0"
 ```
 
 * Release
