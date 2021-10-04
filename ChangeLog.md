@@ -1,6 +1,29 @@
 
-## Release [v1.0.6](https://github.com/voyages-sncf-technologies/mageproj/releases/v1.0.6) (2020-06-17 11:53:51 +0200)
+## Release [v2.0.0](https://github.com/voyages-sncf-technologies/mageproj/releases/v2.0.0) (2021-10-04 13:45:40 +0200)
 
+* [f41553f](https://github.com/voyages-sncf-technologies/mageproj/commit/f41553f) - Add a release target (Nicolas Ocquidant)
+* [d8685a7](https://github.com/voyages-sncf-technologies/mageproj/commit/d8685a7) - Update name to include v2 (Nicolas Ocquidant)
+* [10522e3](https://github.com/voyages-sncf-technologies/mageproj/commit/10522e3) - Tag for version starts with a 'v' (Nicolas Ocquidant)
+* [2a381b8](https://github.com/voyages-sncf-technologies/mageproj/commit/2a381b8) - Complete README (commands) (Nicolas Ocquidant)
+* [0770be9](https://github.com/voyages-sncf-technologies/mageproj/commit/0770be9) - Better README (Nicolas Ocquidant)
+* [e7e6abc](https://github.com/voyages-sncf-technologies/mageproj/commit/e7e6abc) - Better env prefix (Nicolas Ocquidant)
+* [01f0f4b](https://github.com/voyages-sncf-technologies/mageproj/commit/01f0f4b) - Update release process (Nicolas Ocquidant)
+* [1ecfbc3](https://github.com/voyages-sncf-technologies/mageproj/commit/1ecfbc3) - Example in README (Nicolas Ocquidant)
+* [3bfc9ac](https://github.com/voyages-sncf-technologies/mageproj/commit/3bfc9ac) - Add a release target (Nicolas Ocquidant)
+* [18fa9a5](https://github.com/voyages-sncf-technologies/mageproj/commit/18fa9a5) - Add an example for magefile (Nicolas Ocquidant)
+* [eecd931](https://github.com/voyages-sncf-technologies/mageproj/commit/eecd931) - Coherency in logging (Nicolas Ocquidant)
+* [247ca0a](https://github.com/voyages-sncf-technologies/mageproj/commit/247ca0a) - Lazy get value from env (Nicolas Ocquidant)
+* [110c30f](https://github.com/voyages-sncf-technologies/mageproj/commit/110c30f) - Remove Debug mode (only Verbose) (Nicolas Ocquidant)
+* [439917d](https://github.com/voyages-sncf-technologies/mageproj/commit/439917d) - Use of go:build instead of +build (Nicolas Ocquidant)
+* [2d0c34c](https://github.com/voyages-sncf-technologies/mageproj/commit/2d0c34c) - Satisfy static check (Nicolas Ocquidant)
+* [22a9ec1](https://github.com/voyages-sncf-technologies/mageproj/commit/22a9ec1) - Set types above in files and add few comments (Nicolas Ocquidant)
+* [7e0ae6f](https://github.com/voyages-sncf-technologies/mageproj/commit/7e0ae6f) - Allow the use of MAGEPROJ env variables (Nicolas Ocquidant)
+* [8b87410](https://github.com/voyages-sncf-technologies/mageproj/commit/8b87410) - Add a Package target as example (Nicolas Ocquidant)
+* [0068550](https://github.com/voyages-sncf-technologies/mageproj/commit/0068550) - Update dependencies versions (Nicolas Ocquidant)
+
+## Release [v1.0.6](https://github.com/voyages-sncf-technologies/mageproj/releases/v1.0.6) (2020-06-17 11:55:10 +0200)
+
+* [7bfc34b](https://github.com/voyages-sncf-technologies/mageproj/commit/7bfc34b) - Changelog for v1.0.6 (Nicolas Ocquidant)
 * [8ff1a47](https://github.com/voyages-sncf-technologies/mageproj/commit/8ff1a47) - Allow c/p from RELEASE.md (Nicolas Ocquidant)
 * [231ccc1](https://github.com/voyages-sncf-technologies/mageproj/commit/231ccc1) - Build tarball for Linux/MacOS and zip for Windows (Nicolas Ocquidant)
 
