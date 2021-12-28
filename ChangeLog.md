@@ -1,6 +1,12 @@
 
-## Release [v2.0.0](https://github.com/voyages-sncf-technologies/mageproj/releases/v2.0.0) (2021-10-04 13:45:40 +0200)
+## Release [v2.0.1](https://github.com/voyages-sncf-technologies/mageproj/releases/v2.0.1) (2021-12-28 21:11:08 +0100)
 
+* [5eb22e4](https://github.com/voyages-sncf-technologies/mageproj/commit/5eb22e4) - Ignore merge commit messages in ChangeLog (Nicolas Ocquidant)
+* [01d26a3](https://github.com/voyages-sncf-technologies/mageproj/commit/01d26a3) - Missing $ sign in README (Nicolas Ocquidant)
+
+## Release [v2.0.0](https://github.com/voyages-sncf-technologies/mageproj/releases/v2.0.0) (2021-10-04 13:47:19 +0200)
+
+* [60ef134](https://github.com/voyages-sncf-technologies/mageproj/commit/60ef134) - Changelog for v2.0.0 (Nicolas Ocquidant)
 * [f41553f](https://github.com/voyages-sncf-technologies/mageproj/commit/f41553f) - Add a release target (Nicolas Ocquidant)
 * [d8685a7](https://github.com/voyages-sncf-technologies/mageproj/commit/d8685a7) - Update name to include v2 (Nicolas Ocquidant)
 * [10522e3](https://github.com/voyages-sncf-technologies/mageproj/commit/10522e3) - Tag for version starts with a 'v' (Nicolas Ocquidant)
