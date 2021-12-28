@@ -300,6 +300,14 @@ func (c *MageLibrary) ChangeLog(version, filename string, artifactURL, gitURL st
 			}
 		}
 
+		if keep := os.Getenv("MAGEFILEP_MERGE_COMMIT"); keep != "yes" {
+			if strings.Contains(tokens.subject, "Merge branch") {
+				if strings.Contains(tokens.subject, "into") {
+					continue
+				}
+			}
+		}
+
 		outs = fmt.Sprintf("* [%s](%s/commit/%s) - %s (%s)\n", tokens.commitHash, gitURL, tokens.commitHash, tokens.subject, tokens.committerName)
 
 		if _, err = newfile.WriteString(outs); err != nil {
