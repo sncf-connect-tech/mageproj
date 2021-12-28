@@ -9,7 +9,7 @@ ver="1.0.0"
 $ MAGEFILEP_VERSION=$ver mage changelog
 File ChangeLog.md generated
 
-# then commit changes...
+# then commit change -> Changelog for $ver
 ```
 
 * Release creating a git tag
